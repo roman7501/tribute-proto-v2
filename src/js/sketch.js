@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import fragment from "./shaders/fragment.glsl";
+import fragment2 from "./shaders/fragment2.glsl";
 import vertex from "./shaders/vertex.glsl";
 
 export default class Sketch {
@@ -62,14 +63,28 @@ export default class Sketch {
       fragmentShader: fragment,
       transparent: true,
     });
+    this.material2 = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 },
+      },
+      side: THREE.DoubleSide,
+      vertexShader: vertex,
+      fragmentShader: fragment2,
+      transparent: true,
+    });
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh2 = new THREE.Mesh(this.geometry, this.material2);
+    this.mesh2.geometry.scale = 0.005;
+    this.mesh2.position.z = 0.5;
+
     this.scene.add(this.mesh);
+    this.scene.add(this.mesh2);
   }
 
   render() {
     this.material.uniforms.time.value += 0.05;
-
+    this.material2.uniforms.time.value += 0.05;
     // this.renderer.render();
     this.renderer.render(this.scene, this.camera);
 
